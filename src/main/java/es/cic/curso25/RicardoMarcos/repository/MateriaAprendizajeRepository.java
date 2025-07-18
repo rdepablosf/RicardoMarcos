@@ -15,3 +15,5 @@ public interface MateriaAprendizajeRepository extends JpaRepository<MateriaApren
     MateriaAprendizaje findByNombre(String nombre); // Nos permite buscar por el nombre
 
 }
+
+
