@@ -2,7 +2,6 @@ package es.cic.curso25.RicardoMarcos.controller;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import es.cic.curso25.RicardoMarcos.exception.MateriaNotFoundException;
 import es.cic.curso25.RicardoMarcos.model.MateriaAprendizaje;
 import es.cic.curso25.RicardoMarcos.service.MateriaAprendizajeService;
 
@@ -34,10 +33,15 @@ public class MateriaAprendizajeController {
         return materiaAprendizajeService.listaMateriasAprendizaje();
     }
 
-    // Busca por id
+    // Busca por id:  Response entinty es una clase que representa las respuesta HTTP, ? significa que puede recibir cualquier cosa (en este caso un MateriaAprendizaje o String). Al ser fallo por parte del cliente (mete mal el id) se da status 404 y salta excepcion
     @GetMapping("/{id}")
-    public Optional<MateriaAprendizaje> buscarPorId(@PathVariable Long id) {
-        return materiaAprendizajeService.buscarPorId(id);
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        try {
+            MateriaAprendizaje materia = materiaAprendizajeService.buscarPorId(id);
+            return ResponseEntity.ok(materia);
+        } catch (MateriaNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     // Crea nueva

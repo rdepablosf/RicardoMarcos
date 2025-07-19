@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import es.cic.curso25.RicardoMarcos.exception.MateriaNotFoundException;
 import es.cic.curso25.RicardoMarcos.model.MateriaAprendizaje;
 import es.cic.curso25.RicardoMarcos.repository.MateriaAprendizajeRepository;
 
@@ -28,10 +30,11 @@ public class MateriaAprendizajeService {
         return materiaAprendizajeRepository.findAll();
     }
 
-    //Bucar usando ID: es necesario usar el tipo Optional porque JpaRepository nos va a devolver un Optional<>
+    //Bucar usando ID: Antes era necesario usar el tipo Optional porque JpaRepository nos va a devolver un Optional<> pero ahora no se usa porque ya va a devolver directamente materia de aprendizaje o lanza excepcion
 
-    public Optional<MateriaAprendizaje> buscarPorId(Long id) {
-        return materiaAprendizajeRepository.findById(id);
+    public MateriaAprendizaje buscarPorId(Long id) {
+        return materiaAprendizajeRepository.findById(id)
+        .orElseThrow(()->new MateriaNotFoundException(id));
     }
 
     //Crear  
@@ -59,6 +62,7 @@ public class MateriaAprendizajeService {
     public MateriaAprendizaje buscarPorNombre(String nombre) {
         return materiaAprendizajeRepository.findByNombre(nombre);
     }
+
 
 
     //Actualiza la materia
