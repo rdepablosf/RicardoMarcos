@@ -34,16 +34,16 @@ public class MateriaAprendizajeServiceTest {
          MateriaAprendizaje materia = new MateriaAprendizaje();
 
         //Creamos el objeto simulado
-         materia.setId(1L); //L indica que es un long
+         materia.setId(2L); //L indica que es un long
         materia.setNombre("JAVA");
-        when(materiaAprendizajeRepository.findById(1L)).thenReturn(Optional.of(materia));
+        when(materiaAprendizajeRepository.findById(2L)).thenReturn(Optional.of(materia));
 
         //Creamos el que vamos a buscar
-        MateriaAprendizaje busqueda= materiaAprendizajeService.buscarPorId(1L);
+        MateriaAprendizaje busqueda= materiaAprendizajeService.buscarPorId(2L);
 
         assertNotNull(busqueda);
         assertEquals("JAVA", busqueda.getNombre());
-        verify(materiaAprendizajeRepository).findById(1L); // Verifica que se llamó al repositorio
+        verify(materiaAprendizajeRepository).findById(2L); // Verifica que se llamó al repositorio
          
     }
 
