@@ -46,6 +46,34 @@ public class MateriaAprendizajeControllerTest {
                 .andExpect(jsonPath("$.nombre").value("JAVA")); // Validamos el campo nombre que aparecerá en el JSON
     }
 
-  
+    @Test
+    void buscarPorNombre_devuelveMateriaSiExiste() throws Exception {
+        // Arrange
+        MateriaAprendizaje materia = new MateriaAprendizaje();
+        materia.setId(2L);
+        materia.setNombre("SPRING");
+        materia.setFinalizado(true);
+
+        when(materiaAprendizajeService.buscarPorNombre("SPRING")).thenReturn(materia);
+
+        // Act & Assert
+        mockMvc.perform(get("/materias/nombre/SPRING")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("SPRING"))
+                .andExpect(jsonPath("$.finalizado").value(true));
+    }
+
+    @Test
+    void buscarPorId_devuelve404SiNoExiste() throws Exception {
+        // Arrange
+        when(materiaAprendizajeService.buscarPorId(99L)).thenThrow(new MateriaNotFoundException(99L));
+
+        // Act & Assert
+        mockMvc.perform(get("/materias/99")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").value("No se encontró la materia con id: 99"));
+    }
 
 }
